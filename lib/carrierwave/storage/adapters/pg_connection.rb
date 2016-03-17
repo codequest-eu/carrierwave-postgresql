@@ -6,7 +6,7 @@ module CarrierWave
         def identifier
           @oid ||= connection.lo_creat
         end
-        
+
         def read
           @uploader.model.transaction do
             lo = connection.lo_open(identifier)
@@ -27,7 +27,9 @@ module CarrierWave
         end
 
         def delete
-          connection.lo_unlink(identifier)
+          old_identifier = identifier
+          @oid = connection.lo_creat
+          connection.lo_unlink(old_identifier)
         end
 
         def file_length
